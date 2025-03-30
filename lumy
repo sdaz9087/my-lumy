@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumy Avatar</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e, #ff4d6d);
+            overflow: hidden;
+        }
+
+        /* پیام عاشقانه */
+        .message {
+            font-size: 24px;
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 5px 30px rgba(255, 50, 100, 0.5);
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 0) scale(0.8);
+            transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .avatar {
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, #ff4d6d, #c32aff);
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 0 0 20px rgba(255, 77, 109, 0.6);
+            animation: glow 1.5s infinite alternate;
+            transition: transform 0.1s ease-out;
+        }
+
+        .eye {
+            width: 20px;
+            height: 30px;
+            background: black;
+            border-radius: 50%;
+            position: absolute;
+            top: 50px;
+        }
+
+        .eye.left {
+            left: 40px;
+        }
+
+        .eye.right {
+            right: 40px;
+        }
+
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 10px rgba(255, 77, 109, 0.6);
+            }
+
+            100% {
+                box-shadow: 0 0 25px rgba(255, 77, 109, 1);
+            }
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                transform: scaleY(1);
+            }
+
+            50% {
+                transform: scaleY(0.1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="avatar" id="lumy" onclick="showMessage()">
+        <div class="eye left"></div>
+        <div class="eye right"></div>
+    </div>
+
+    <div class="message" id="loveMessage"></div>
+
+    <script>
+        const lumy = document.getElementById("lumy");
+        const eyes = document.querySelectorAll(".eye");
+        let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+
+        document.addEventListener("mousemove", (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function moveLumy() {
+            const lumyX = parseFloat(getComputedStyle(lumy).left) || window.innerWidth / 2;
+            const lumyY = parseFloat(getComputedStyle(lumy).top) || window.innerHeight / 2;
+            const dx = (mouseX - lumyX) * 0.05;
+            const dy = (mouseY - lumyY) * 0.05;
+
+            lumy.style.left = `${lumyX + dx}px`;
+            lumy.style.top = `${lumyY + dy}px`;
+            requestAnimationFrame(moveLumy);
+        }
+        moveLumy();
+
+        function moveEyes(event) {
+            let x = (event.clientX / window.innerWidth) * 40 - 20;
+            let y = (event.clientY / window.innerHeight) * 20 - 10;
+            eyes.forEach(eye => {
+                eye.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        }
+
+        document.addEventListener("mousemove", moveEyes);
+
+        function blink() {
+            eyes.forEach(eye => eye.style.animation = "blink 0.2s ease-in-out");
+            setTimeout(() => eyes.forEach(eye => eye.style.animation = ""), 200);
+        }
+        setInterval(blink, 3000);
+
+        const messages = [
+            "💖 تو همیشه بهترین و مهربون‌ترین هستی! 💖",
+            "✨ با تو همه‌چیز روشن‌تر و زیباتره! ✨",
+            "🌟 دلم همیشه برای لحظه‌های با تو بودن تنگ میشه! 🌟",
+            "💫 همه‌چیز با تو پر از عشق و شادی میشه! 💫"
+        ];
+
+        function getRandomMessage() {
+            return messages[Math.floor(Math.random() * messages.length)];
+        }
+
+        function showMessage() {
+            const messageElement = document.getElementById('loveMessage');
+            messageElement.innerHTML = getRandomMessage();
+            messageElement.style.opacity = "1";
+            messageElement.style.transform = "translate(-50%, -50%) scale(1)";
+        }
+    </script>
+
+</body>
+
+</html>
